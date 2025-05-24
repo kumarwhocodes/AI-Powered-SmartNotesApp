@@ -2,29 +2,36 @@ package dev.kumar.assignment.presentation.screens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import dev.kumar.assignment.data.TextFormatting
 import dev.kumar.assignment.presentation.components.BottomFormattingBar
+import dev.kumar.assignment.presentation.components.RichTextField
 import dev.kumar.assignment.presentation.vm.AddEditNoteViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,6 +43,10 @@ fun AddEditNoteScreen(
 ) {
     val noteTitle by viewModel.noteTitle.collectAsState()
     val noteText by viewModel.noteText.collectAsState()
+
+    var titleFormatting by remember { mutableStateOf(TextFormatting()) }
+    var textFormatting by remember { mutableStateOf(TextFormatting()) }
+    var isTextFieldFocused by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -51,51 +62,62 @@ fun AddEditNoteScreen(
                         onClick = {
                             viewModel.saveNote(onSaveClick)
                         },
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        contentColor = MaterialTheme.colorScheme.onPrimary
+                        containerColor = MaterialTheme.colorScheme.onPrimary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary,
+                        elevation = FloatingActionButtonDefaults.elevation(
+                            defaultElevation = 0.dp
+                        )
                     ) {
-                        Icon(imageVector = Icons.Default.Save, contentDescription = "Save")
+                        Icon(
+                            imageVector = Icons.Default.Save, contentDescription = "Save",
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
                     }
                 }
             )
-        },
-        bottomBar = { BottomFormattingBar() }
+        }
     ) { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
-                .padding(16.dp)
+                .windowInsetsPadding(WindowInsets.ime)
         ) {
-            OutlinedTextField(
-                value = noteTitle,
-                onValueChange = viewModel::updateTitle,
-                placeholder = { Text("Note title...") },
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth(),
-                singleLine = true,
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MaterialTheme.colorScheme.onPrimary,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    cursorColor = MaterialTheme.colorScheme.onPrimary
+                    .weight(1f)
+                    .padding(top = 16.dp, start = 16.dp, end = 16.dp)
+            ) {
+                RichTextField(
+                    value = noteTitle,
+                    onValueChange = viewModel::updateTitle,
+                    formatting = titleFormatting,
+                    placeholder = "Note title...",
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
                 )
-            )
 
-            Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-            OutlinedTextField(
-                value = noteText,
-                onValueChange = viewModel::updateText,
-                placeholder = { Text("Write your note...") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                minLines = 10,
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MaterialTheme.colorScheme.onPrimary,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    cursorColor = MaterialTheme.colorScheme.onPrimary
+                RichTextField(
+                    value = noteText,
+                    onValueChange = {
+                        viewModel.updateText(it)
+                        isTextFieldFocused = true
+                    },
+                    formatting = textFormatting,
+                    placeholder = "Write your note...",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    minLines = 10
                 )
+            }
+
+            BottomFormattingBar(
+                currentFormatting = textFormatting,
+                onFormattingChange = { textFormatting = it },
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }
