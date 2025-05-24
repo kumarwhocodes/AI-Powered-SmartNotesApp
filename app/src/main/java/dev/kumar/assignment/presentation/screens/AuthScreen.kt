@@ -1,4 +1,4 @@
-package dev.kumar.assignment.presentation
+package dev.kumar.assignment.presentation.screens
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -18,6 +18,7 @@ import androidx.navigation.NavController
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dev.kumar.assignment.navigation.Screen
+import dev.kumar.assignment.presentation.components.GoogleSignInButton
 import dev.kumar.assignment.utils.Constants
 import dev.kumar.assignment.utils.checkAndStoreUser
 
@@ -40,7 +41,11 @@ fun AuthScreen(navController: NavController) {
             onAuthComplete = { result ->
                 user = result.user
                 checkAndStoreUser(user)
-                navController.navigate(Screen.DashboardScreen.route)
+                navController.navigate(Screen.DashboardScreen.route) {
+                    popUpTo(Screen.AuthScreen.route) {
+                        inclusive = true
+                    }
+                }
                 Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
             },
             onAuthError = {

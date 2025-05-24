@@ -1,4 +1,4 @@
-package dev.kumar.assignment.presentation
+package dev.kumar.assignment.presentation.components
 
 import android.content.Context
 import android.content.Intent

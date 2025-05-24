@@ -4,4 +4,8 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.compose) apply false
     alias(libs.plugins.google.gms.google.services) apply false
+    // Add the dependency for the Kotlin Symbol Processing Gradle plugin
+    id("com.google.devtools.ksp") version "2.0.21-1.0.25" apply false
+    // Add the dependency for the Hilt Gradle plugin
+    id("com.google.dagger.hilt.android") version "2.48" apply false
 }
