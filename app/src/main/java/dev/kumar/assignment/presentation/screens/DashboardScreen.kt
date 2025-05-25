@@ -37,26 +37,24 @@ fun DashboardScreen(
 ) {
     val notes by viewModel.notes.collectAsState()
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("AI-Powered Smart Notes App") },
-                actions = {
-                    IconButton(onClick = {
-                        viewModel.signOut()
-                        onSignOut()
-                    }) {
-                        Icon(Icons.Default.ExitToApp, contentDescription = "Sign Out")
-                    }
-                }
-            )
-        },
-        floatingActionButton = {
-            FloatingActionButton(onClick = onAddNoteClick) {
-                Icon(Icons.Default.Add, contentDescription = "Add Note")
+    Scaffold(topBar = {
+        TopAppBar(title = { Text("AI-Powered Smart Notes App") }, actions = {
+            IconButton(onClick = {
+                viewModel.signOut()
+                onSignOut()
+            }) {
+                Icon(Icons.Default.ExitToApp, contentDescription = "Sign Out")
             }
+        })
+    }, floatingActionButton = {
+        FloatingActionButton(
+            onClick = onAddNoteClick,
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onSurface
+        ) {
+            Icon(Icons.Default.Add, contentDescription = "Add Note")
         }
-    ) { padding ->
+    }) { padding ->
         if (notes.isEmpty()) {
             Box(
                 modifier = Modifier
@@ -66,7 +64,8 @@ fun DashboardScreen(
             ) {
                 Text(
                     text = "No notes yet. Tap + to create your first note!",
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         } else {
@@ -79,8 +78,7 @@ fun DashboardScreen(
                     NoteCard(
                         note = note,
                         onClick = { onNoteClick(note.id) },
-                        onDelete = { viewModel.deleteNote(note.id) }
-                    )
+                        onDelete = { viewModel.deleteNote(note.id) })
                 }
             }
         }
