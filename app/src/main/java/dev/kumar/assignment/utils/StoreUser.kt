@@ -18,7 +18,7 @@ fun checkAndStoreUser(
             if (!document.exists()) {
                 storeUserData(user)
             } else {
-                Log.d("Firestore", "pehle se stored hai firestore m ye user")
+                Log.d("Firestore", "User already stored in firebase.")
             }
         }
     }
@@ -33,9 +33,9 @@ private fun storeUserData(user: FirebaseUser?) {
 
     userRef.set(user.toLocalUser())
         .addOnSuccessListener {
-            Log.d("Firestore", "firestore me user store hogya")
+            Log.d("Firestore", "Stored user in firebase.")
         }
         .addOnFailureListener {
-            Log.d("Firestore", "firestore me user store NAHI hua")
+            Log.d("Firestore", "Unable to store user in firebase.")
         }
 }

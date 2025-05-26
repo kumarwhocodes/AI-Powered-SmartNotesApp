@@ -61,7 +61,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation (libs.androidx.material.icons.extended)
+    implementation(libs.androidx.material.icons.extended)
 
     // Navigation
     implementation(libs.androidx.navigation.compose)
@@ -79,7 +79,7 @@ dependencies {
     implementation(libs.firebase.analytics)
 
     //Google Play Services Auth
-    implementation (libs.play.services.auth)
+    implementation(libs.play.services.auth)
     implementation(libs.androidx.credentials.play.services.auth)
 
     //ROOM
@@ -89,8 +89,8 @@ dependencies {
     implementation(libs.androidx.room.ktx)
 
     //ViewModel and LiveData
-    implementation (libs.androidx.lifecycle.viewmodel.compose)
-    implementation (libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
 
     //DaggerHilt
     implementation(libs.hilt.android)
@@ -99,6 +99,10 @@ dependencies {
     ksp(libs.androidx.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
-    implementation("com.google.ai.client.generativeai:generativeai:0.4.0")
+    //Gemini
+    implementation(libs.generativeai)
+
+    implementation(libs.androidx.credentials)
+    implementation(libs.googleid)
 
 }
